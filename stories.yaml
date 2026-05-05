@@ -18,7 +18,7 @@ stories:
   - story_id: BT-01
     title: User can connect a Bitcoin wallet
     section: Wallet Connection
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "Wallet connect dialog opens when user clicks Connect Wallet"
       - "OKX Wallet, Unisat, and Xverse are listed as Bitcoin wallet options"
@@ -32,7 +32,7 @@ stories:
   - story_id: BT-02
     title: User can connect an Ethereum wallet
     section: Wallet Connection
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "MetaMask and WalletConnect are listed as Ethereum wallet options"
       - "Selecting an ETH wallet triggers the wallet's native connect prompt"
@@ -46,7 +46,7 @@ stories:
   - story_id: BT-03
     title: User can disconnect wallets
     section: Wallet Connection
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "A disconnect option is accessible from the wallet address display in the header"
       - "Disconnecting BTC wallet clears BTC address from the UI and resets wallet state"
@@ -61,7 +61,7 @@ stories:
   - story_id: BT-04
     title: User selects a vault provider and deposit amount
     section: Deposit Flow
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "Dashboard shows list of available vault providers fetched from GraphQL"
       - "User can select a provider and enter a BTC amount to deposit"
@@ -76,7 +76,7 @@ stories:
   - story_id: BT-05
     title: Deposit step 1 — Proof-of-Possession signing
     section: Deposit Flow
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "User is prompted to sign a BIP-322 proof-of-possession message in their BTC wallet"
       - "The PoP dialog explains what the user is signing before the wallet popup appears"
@@ -89,7 +89,7 @@ stories:
   - story_id: BT-06
     title: Deposit step 2 — Ethereum vault registration (pegin request batch)
     section: Deposit Flow
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "A single Ethereum transaction is submitted via submitPeginRequestBatch to register all vaults atomically"
       - "User sees an ETH wallet prompt to approve the transaction"
@@ -103,7 +103,7 @@ stories:
   - story_id: BT-07
     title: Deposit step 3 — Pre-PegIn BTC transaction broadcast
     section: Deposit Flow
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "Pre-PegIn transaction is broadcast to the Bitcoin network after successful ETH registration"
       - "User sees a confirmation with the BTC transaction ID and a link to a block explorer"
@@ -117,7 +117,7 @@ stories:
   - story_id: BT-08
     title: Deposit step 4 — WOTS key submission and payout transaction signing
     section: Deposit Flow
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "WOTS block public keys are derived and submitted to the vault provider via RPC"
       - "App polls VP status (getPeginStatus) and only submits when VP is in PendingDepositorWotsPK state"
@@ -133,7 +133,7 @@ stories:
   - story_id: BT-09
     title: Deposit step 5 — Vault artifact download
     section: Deposit Flow
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "User is prompted to download vault artifacts after payout signing"
       - "Download is user-initiated — the flow does not auto-proceed without the user acknowledging"
@@ -146,7 +146,7 @@ stories:
   - story_id: BT-10
     title: Deposit step 6 — Vault activation (HTLC secret reveal)
     section: Deposit Flow
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "App polls for contract verification before offering activation"
       - "Activation submits the HTLC hashlock secret on Ethereum via vaultActivationService"
@@ -302,7 +302,7 @@ stories:
   - story_id: BT-21
     title: Sanctioned addresses are blocked from depositing
     section: Compliance
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "On wallet connect, the connected ETH and BTC addresses are screened against a sanctions list"
       - "If an address is sanctioned, a blocking modal is shown and all deposit functionality is disabled"
@@ -315,7 +315,7 @@ stories:
   - story_id: BT-22
     title: Users in restricted jurisdictions are geofenced
     section: Compliance
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "On load, the app determines the user's jurisdiction via IP geolocation"
       - "Users in restricted jurisdictions see a geofencing notice and cannot access deposit or borrow flows"
