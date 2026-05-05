@@ -163,7 +163,7 @@ stories:
   - story_id: BT-11
     title: User can view their active vaults and deposit positions
     section: Vault Lifecycle
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "Dashboard displays all vaults associated with the connected BTC+ETH address pair"
       - "Each vault shows: status (Active/Pending/Confirming/Redeeming), deposited BTC amount, and vault provider"
@@ -176,7 +176,7 @@ stories:
   - story_id: BT-12
     title: User can resume an interrupted deposit
     section: Vault Lifecycle
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "If a deposit was interrupted at any step (page refresh, network error), it is recoverable"
       - "On return, the UI shows the deposit at the step where it was interrupted"

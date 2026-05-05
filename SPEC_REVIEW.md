@@ -106,7 +106,7 @@ grep "status:" stories.yaml | sort | uniq -c
 |---|---|---|
 | Wallet Connection (BT-01–03) | 3 | `in-progress` — tests written |
 | Deposit Flow (BT-04–10) | 7 | `in-progress` — tests written |
-| Vault Lifecycle (BT-11–12) | 2 | `not-implemented` |
+| Vault Lifecycle (BT-11–12) | 2 | `in-progress` — tests written |
 | Aave Integration (BT-13–15) | 3 | `not-implemented` |
 | Position Monitoring (BT-16–17) | 2 | `not-implemented` |
 | Withdrawal (BT-18–19) | 2 | `not-implemented` |
@@ -114,5 +114,5 @@ grep "status:" stories.yaml | sort | uniq -c
 | Compliance (BT-21–22) | 2 | `in-progress` — tests written |
 | Application Selection (BT-23) | 1 | `not-implemented` |
 
-**12 of 23 stories have tests written; 11 remain not-implemented.**
-Next: implement Vault Lifecycle (BT-11–12) as the first post-deposit flow.
+**14 of 23 stories have tests written; 9 remain not-implemented.**
+Next: Aave Integration (BT-13–15) — supply, borrow, repay flows.
