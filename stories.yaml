@@ -233,7 +233,7 @@ stories:
   - story_id: BT-16
     title: User can monitor their Aave position health
     section: Position Monitoring
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "Dashboard shows current health factor with colour coding (green ≥ 1.5, yellow 1.0–1.5, red < 1.0)"
       - "Collateral value, borrow balance, and LTV are displayed"
@@ -245,7 +245,7 @@ stories:
   - story_id: BT-17
     title: Cascade risk simulation
     section: Position Monitoring
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "User can simulate a BTC price drop and see the resulting health factor"
       - "Simulation shows the liquidation threshold and how close the position is to it"

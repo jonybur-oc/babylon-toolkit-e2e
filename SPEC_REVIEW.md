@@ -108,11 +108,11 @@ grep "status:" stories.yaml | sort | uniq -c
 | Deposit Flow (BT-04–10) | 7 | `in-progress` — tests written |
 | Vault Lifecycle (BT-11–12) | 2 | `in-progress` — tests written |
 | Aave Integration (BT-13–15) | 3 | `in-progress` — tests written |
-| Position Monitoring (BT-16–17) | 2 | `not-implemented` |
+| Position Monitoring (BT-16–17) | 2 | `in-progress` — tests written |
 | Withdrawal (BT-18–19) | 2 | `not-implemented` |
 | Activity Log (BT-20) | 1 | `not-implemented` |
 | Compliance (BT-21–22) | 2 | `in-progress` — tests written |
 | Application Selection (BT-23) | 1 | `not-implemented` |
 
-**17 of 23 stories have tests written; 6 remain not-implemented.**
-Next: Position Monitoring (BT-16–17) — health factor dashboard and cascade risk simulation.
+**19 of 23 stories have tests written; 4 remain not-implemented.**
+Next: Withdrawal and Pegout Monitoring (BT-18–19) — initiate withdrawal and monitor pegout status.
