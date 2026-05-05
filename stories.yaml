@@ -1,0 +1,341 @@
+# yaml-language-server: $schema=https://locus.dev/schema/v1.3/stories.schema.json
+schema_version: "1.3"
+
+project:
+  name: "Babylon Vault — vault staking webapp"
+  description: >
+    Machine-readable product intent specification for the Babylon Vault frontend.
+    Users deposit BTC as collateral, receive vaultBTC on Ethereum for DeFi use.
+    This spec covers all critical user flows: wallet connection, the full deposit
+    signing ceremony, vault lifecycle management, Aave collateral/borrow/repay,
+    position monitoring, withdrawal/pegout monitoring, activity log, compliance,
+    and application selection.
+
+stories:
+
+  # ── Section 1: Wallet Connection (BT-01 – BT-03) ──────────────────────────
+
+  - story_id: BT-01
+    title: User can connect a Bitcoin wallet
+    section: Wallet Connection
+    status: not-implemented
+    acceptance_criteria:
+      - "Wallet connect dialog opens when user clicks Connect Wallet"
+      - "OKX Wallet, Unisat, and Xverse are listed as Bitcoin wallet options"
+      - "Selecting a wallet triggers the wallet's native connect prompt"
+      - "On success, the user's BTC address is displayed in the header"
+      - "If the wallet rejects the connection, an error message is shown and the dialog remains open"
+      - "Connected wallet persists across page refreshes via localStorage"
+    test_refs:
+      - "services/vault/e2e/wallet-connection.spec.ts#BT-01"
+
+  - story_id: BT-02
+    title: User can connect an Ethereum wallet
+    section: Wallet Connection
+    status: not-implemented
+    acceptance_criteria:
+      - "MetaMask and WalletConnect are listed as Ethereum wallet options"
+      - "Selecting an ETH wallet triggers the wallet's native connect prompt"
+      - "On success, the user's ETH address is displayed in the header"
+      - "If the ETH wallet rejects the connection, an error message is shown"
+      - "Connected ETH wallet persists across page refreshes"
+      - "Wrong network warning is shown if user is not on the expected Ethereum chain (mainnet or Sepolia per env config)"
+    test_refs:
+      - "services/vault/e2e/wallet-connection.spec.ts#BT-02"
+
+  - story_id: BT-03
+    title: User can disconnect wallets
+    section: Wallet Connection
+    status: not-implemented
+    acceptance_criteria:
+      - "A disconnect option is accessible from the wallet address display in the header"
+      - "Disconnecting BTC wallet clears BTC address from the UI and resets wallet state"
+      - "Disconnecting ETH wallet clears ETH address from the UI"
+      - "After disconnecting, the user is returned to the unauthenticated state"
+      - "Disconnect removes wallet from localStorage so it does not auto-reconnect on refresh"
+    test_refs:
+      - "services/vault/e2e/wallet-connection.spec.ts#BT-03"
+
+  # ── Section 2: Deposit Flow — Signing Ceremony (BT-04 – BT-10) ───────────
+
+  - story_id: BT-04
+    title: User selects a vault provider and deposit amount
+    section: Deposit Flow
+    status: not-implemented
+    acceptance_criteria:
+      - "Dashboard shows list of available vault providers fetched from GraphQL"
+      - "User can select a provider and enter a BTC amount to deposit"
+      - "Minimum deposit amount is enforced — amounts below the threshold show a validation error"
+      - "Amount field validates that user has sufficient BTC UTXOs; shows error if not"
+      - "Deposit button is disabled until both a provider is selected and a valid amount is entered"
+      - "Fee estimate is displayed before the user confirms"
+      - "If FF_DISABLE_DEPOSIT feature flag is set, the deposit button shows 'Depositing Unavailable' and is disabled"
+    test_refs:
+      - "services/vault/e2e/deposit-flow.spec.ts#BT-04"
+
+  - story_id: BT-05
+    title: Deposit step 1 — Proof-of-Possession signing
+    section: Deposit Flow
+    status: not-implemented
+    acceptance_criteria:
+      - "User is prompted to sign a BIP-322 proof-of-possession message in their BTC wallet"
+      - "The PoP dialog explains what the user is signing before the wallet popup appears"
+      - "If the user rejects the signing, the flow shows an error and allows retry"
+      - "PoP signature is validated before proceeding; invalid signature blocks the flow with a descriptive error"
+      - "On success, the flow automatically advances to step 2 (ETH registration)"
+    test_refs:
+      - "services/vault/e2e/deposit-flow.spec.ts#BT-05"
+
+  - story_id: BT-06
+    title: Deposit step 2 — Ethereum vault registration (pegin request batch)
+    section: Deposit Flow
+    status: not-implemented
+    acceptance_criteria:
+      - "A single Ethereum transaction is submitted via submitPeginRequestBatch to register all vaults atomically"
+      - "User sees an ETH wallet prompt to approve the transaction"
+      - "If the ETH transaction fails, the Pre-PegIn BTC transaction is NOT broadcast (no BTC locked in unregistered outputs)"
+      - "Pending deposit state is saved to localStorage before BTC broadcast"
+      - "On success, the flow advances to step 3 (BTC broadcast)"
+      - "Transaction hash is shown in the UI after successful registration"
+    test_refs:
+      - "services/vault/e2e/deposit-flow.spec.ts#BT-06"
+
+  - story_id: BT-07
+    title: Deposit step 3 — Pre-PegIn BTC transaction broadcast
+    section: Deposit Flow
+    status: not-implemented
+    acceptance_criteria:
+      - "Pre-PegIn transaction is broadcast to the Bitcoin network after successful ETH registration"
+      - "User sees a confirmation with the BTC transaction ID and a link to a block explorer"
+      - "Deposit status in localStorage is updated from PENDING to CONFIRMING after broadcast"
+      - "If broadcast fails (e.g. RBF conflict, low fee), an error is shown with actionable guidance"
+      - "UTXOs used in the transaction are marked reserved so they cannot be used in a concurrent deposit"
+      - "On success, flow advances to step 4 (WOTS submission + payout signing)"
+    test_refs:
+      - "services/vault/e2e/deposit-flow.spec.ts#BT-07"
+
+  - story_id: BT-08
+    title: Deposit step 4 — WOTS key submission and payout transaction signing
+    section: Deposit Flow
+    status: not-implemented
+    acceptance_criteria:
+      - "WOTS block public keys are derived and submitted to the vault provider via RPC"
+      - "App polls VP status (getPeginStatus) and only submits when VP is in PendingDepositorWotsPK state"
+      - "If VP has already advanced past that status, WOTS submission is skipped gracefully"
+      - "User is prompted to sign payout transactions in their BTC wallet"
+      - "Before signing, payout amounts are independently verified against on-chain/WASM-computed sources"
+      - "If payout amount cannot be verified, signing is blocked with a clear error"
+      - "Each payout transaction signing request shows the amount and destination for user review"
+      - "On success, flow advances to step 5 (artifact download)"
+    test_refs:
+      - "services/vault/e2e/deposit-flow.spec.ts#BT-08"
+
+  - story_id: BT-09
+    title: Deposit step 5 — Vault artifact download
+    section: Deposit Flow
+    status: not-implemented
+    acceptance_criteria:
+      - "User is prompted to download vault artifacts after payout signing"
+      - "Download is user-initiated — the flow does not auto-proceed without the user acknowledging"
+      - "Downloaded artifact file has the expected format and contains the vault data"
+      - "User can re-download if they dismiss the prompt and return to the active deposit"
+      - "On acknowledgement, flow advances to step 6 (vault activation)"
+    test_refs:
+      - "services/vault/e2e/deposit-flow.spec.ts#BT-09"
+
+  - story_id: BT-10
+    title: Deposit step 6 — Vault activation (HTLC secret reveal)
+    section: Deposit Flow
+    status: not-implemented
+    acceptance_criteria:
+      - "App polls for contract verification before offering activation"
+      - "Activation submits the HTLC hashlock secret on Ethereum via vaultActivationService"
+      - "Before submission, app asserts hash(secret) === expectedHash; mismatch blocks activation with a clear error"
+      - "The secret is derived from source-of-truth derivation, never from UI state"
+      - "User sees ETH wallet prompt to confirm the activation transaction"
+      - "On successful activation, vault status changes to Active and deposit is shown as completed"
+      - "If activation fails on-chain, the error is surfaced with the transaction hash and reason"
+    test_refs:
+      - "services/vault/e2e/deposit-flow.spec.ts#BT-10"
+
+  # ── Section 3: Vault Lifecycle Management (BT-11 – BT-12) ─────────────────
+
+  - story_id: BT-11
+    title: User can view their active vaults and deposit positions
+    section: Vault Lifecycle
+    status: not-implemented
+    acceptance_criteria:
+      - "Dashboard displays all vaults associated with the connected BTC+ETH address pair"
+      - "Each vault shows: status (Active/Pending/Confirming/Redeeming), deposited BTC amount, and vault provider"
+      - "Pending deposits in localStorage are shown with their current step so the user can resume"
+      - "Stale reservations (UTXOs reserved for cancelled flows) are cleaned up after timeout"
+      - "Vault list refreshes automatically when chain state changes"
+    test_refs:
+      - "services/vault/e2e/vault-lifecycle.spec.ts#BT-11"
+
+  - story_id: BT-12
+    title: User can resume an interrupted deposit
+    section: Vault Lifecycle
+    status: not-implemented
+    acceptance_criteria:
+      - "If a deposit was interrupted at any step (page refresh, network error), it is recoverable"
+      - "On return, the UI shows the deposit at the step where it was interrupted"
+      - "User can continue from the interrupted step without restarting from scratch"
+      - "If the Pre-PegIn tx was already broadcast (CONFIRMING), the user cannot restart the BTC broadcast"
+      - "If ETH registration failed before BTC broadcast, the user is shown the option to retry from ETH"
+    test_refs:
+      - "services/vault/e2e/vault-lifecycle.spec.ts#BT-12"
+
+  # ── Section 4: Aave Integration — Collateral and Borrowing (BT-13 – BT-15) ─
+
+  - story_id: BT-13
+    title: User can supply vaultBTC as Aave collateral
+    section: Aave Integration
+    status: not-implemented
+    acceptance_criteria:
+      - "Dashboard shows the user's vaultBTC balance available for Aave collateral"
+      - "User can select an amount to supply and sees the updated health factor preview"
+      - "Supplying triggers an ETH wallet transaction; user sees the wallet prompt"
+      - "On success, collateral balance updates in the UI without requiring a page refresh"
+      - "If FF_DISABLE_BORROW feature flag is set, borrow-related UI is disabled with 'Borrowing Unavailable'"
+    test_refs:
+      - "services/vault/e2e/aave.spec.ts#BT-13"
+
+  - story_id: BT-14
+    title: User can borrow against Aave collateral
+    section: Aave Integration
+    status: not-implemented
+    acceptance_criteria:
+      - "Borrow dialog shows available borrow capacity based on current collateral and LTV"
+      - "User can enter a borrow amount and asset (e.g. USDC, ETH)"
+      - "Real-time health factor is shown as user adjusts borrow amount"
+      - "Amounts that would put the health factor below 1.0 are blocked with a warning"
+      - "Borrowing triggers an ETH wallet transaction"
+      - "On success, borrow balance and health factor update in the UI"
+    test_refs:
+      - "services/vault/e2e/aave.spec.ts#BT-14"
+
+  - story_id: BT-15
+    title: User can repay Aave debt
+    section: Aave Integration
+    status: not-implemented
+    acceptance_criteria:
+      - "Repay dialog shows current debt per asset"
+      - "User can select full or partial repayment"
+      - "Repayment triggers approval (if needed) and repay transaction in ETH wallet"
+      - "On success, debt balance decreases and health factor improves in the UI"
+      - "If user's token balance is insufficient for full repayment, a warning is shown"
+    test_refs:
+      - "services/vault/e2e/aave.spec.ts#BT-15"
+
+  # ── Section 5: Position Monitoring (BT-16 – BT-17) ───────────────────────
+
+  - story_id: BT-16
+    title: User can monitor their Aave position health
+    section: Position Monitoring
+    status: not-implemented
+    acceptance_criteria:
+      - "Dashboard shows current health factor with colour coding (green ≥ 1.5, yellow 1.0–1.5, red < 1.0)"
+      - "Collateral value, borrow balance, and LTV are displayed"
+      - "Health factor updates at regular polling intervals without page refresh"
+      - "An in-app warning banner appears when health factor falls below a configurable threshold"
+    test_refs:
+      - "services/vault/e2e/position-monitoring.spec.ts#BT-16"
+
+  - story_id: BT-17
+    title: Cascade risk simulation
+    section: Position Monitoring
+    status: not-implemented
+    acceptance_criteria:
+      - "User can simulate a BTC price drop and see the resulting health factor"
+      - "Simulation shows the liquidation threshold and how close the position is to it"
+      - "Simulation is client-side only — does not trigger any on-chain transaction"
+      - "User can adjust the simulated price and see the health factor update in real time"
+    test_refs:
+      - "services/vault/e2e/position-monitoring.spec.ts#BT-17"
+
+  # ── Section 6: Withdrawal and Pegout Monitoring (BT-18 – BT-19) ──────────
+
+  - story_id: BT-18
+    title: User can initiate a vault withdrawal (pegout)
+    section: Withdrawal
+    status: not-implemented
+    acceptance_criteria:
+      - "User can request withdrawal from an active vault"
+      - "Withdrawal flow shows the expected BTC amount to be returned after fees"
+      - "Initiating withdrawal triggers an ETH wallet transaction"
+      - "On success, vault status changes to Redeeming"
+      - "User sees a clear warning that withdrawal is irreversible once submitted"
+    test_refs:
+      - "services/vault/e2e/withdrawal.spec.ts#BT-18"
+
+  - story_id: BT-19
+    title: User can monitor pegout status
+    section: Withdrawal
+    status: not-implemented
+    acceptance_criteria:
+      - "Active pegouts are listed with their current status (Initiated/BTC Broadcasting/Confirmed)"
+      - "App polls pegout status at regular intervals (usePegoutPolling)"
+      - "When the BTC withdrawal transaction is confirmed, status updates to Confirmed and BTC txid is shown"
+      - "User can click the BTC txid to open the block explorer"
+      - "Completed pegouts are moved to the activity log"
+    test_refs:
+      - "services/vault/e2e/withdrawal.spec.ts#BT-19"
+
+  # ── Section 7: Activity Log (BT-20) ──────────────────────────────────────
+
+  - story_id: BT-20
+    title: User can view transaction activity log
+    section: Activity Log
+    status: not-implemented
+    acceptance_criteria:
+      - "Activity page (/activity) lists all historical deposit and withdrawal events for the connected address pair"
+      - "Each entry shows: event type, date, BTC amount, and status"
+      - "Events are sorted by date descending (most recent first)"
+      - "Pending deposits (not yet confirmed) appear in the activity log with a Pending badge"
+      - "Clicking an activity entry shows transaction details including on-chain links"
+    test_refs:
+      - "services/vault/e2e/activity.spec.ts#BT-20"
+
+  # ── Section 8: Compliance — Geofencing and Sanctions Screening (BT-21 – BT-22) ─
+
+  - story_id: BT-21
+    title: Sanctioned addresses are blocked from depositing
+    section: Compliance
+    status: not-implemented
+    acceptance_criteria:
+      - "On wallet connect, the connected ETH and BTC addresses are screened against a sanctions list"
+      - "If an address is sanctioned, a blocking modal is shown and all deposit functionality is disabled"
+      - "The blocking modal does not reveal the specific list or reason to avoid fingerprinting"
+      - "Non-sanctioned users pass through without any UX friction"
+      - "Sanctions check is re-run if the user connects a different wallet"
+    test_refs:
+      - "services/vault/e2e/compliance.spec.ts#BT-21"
+
+  - story_id: BT-22
+    title: Users in restricted jurisdictions are geofenced
+    section: Compliance
+    status: not-implemented
+    acceptance_criteria:
+      - "On load, the app determines the user's jurisdiction via IP geolocation"
+      - "Users in restricted jurisdictions see a geofencing notice and cannot access deposit or borrow flows"
+      - "The geofencing check does not block read-only views (vault status, activity log)"
+      - "VPN detection is applied where possible; if a VPN is detected in a restricted region, the block is applied"
+      - "Geofencing result is cached for the session to avoid repeated API calls"
+    test_refs:
+      - "services/vault/e2e/compliance.spec.ts#BT-22"
+
+  # ── Section 9: Application Selection (BT-23) ─────────────────────────────
+
+  - story_id: BT-23
+    title: User can navigate between registered DeFi applications
+    section: Application Selection
+    status: not-implemented
+    acceptance_criteria:
+      - "Dashboard lists all registered applications (e.g. Aave) fetched from the application registry"
+      - "Each application entry shows its name, logo, and a brief description"
+      - "Clicking an application navigates to /app/<appId>/* route"
+      - "Applications that are unavailable (e.g. paused by admin) are shown as disabled with a tooltip"
+      - "Application list is dynamically driven by getAllApplications() — adding a new application requires no route change"
+    test_refs:
+      - "services/vault/e2e/application-selection.spec.ts#BT-23"

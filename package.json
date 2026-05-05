@@ -1,0 +1,14 @@
+{
+  "name": "babylon-toolkit-e2e",
+  "version": "1.0.0",
+  "description": "Playwright E2E test suite for Babylon Vault — derived from product intent specification (BT-01 to BT-23)",
+  "scripts": {
+    "test": "playwright test",
+    "test:ci": "playwright test --reporter=github",
+    "test:ui": "playwright test --ui"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.43.0",
+    "typescript": "^5.4.0"
+  }
+}
