@@ -191,7 +191,7 @@ stories:
   - story_id: BT-13
     title: User can supply vaultBTC as Aave collateral
     section: Aave Integration
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "Dashboard shows the user's vaultBTC balance available for Aave collateral"
       - "User can select an amount to supply and sees the updated health factor preview"
@@ -204,7 +204,7 @@ stories:
   - story_id: BT-14
     title: User can borrow against Aave collateral
     section: Aave Integration
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "Borrow dialog shows available borrow capacity based on current collateral and LTV"
       - "User can enter a borrow amount and asset (e.g. USDC, ETH)"
@@ -218,7 +218,7 @@ stories:
   - story_id: BT-15
     title: User can repay Aave debt
     section: Aave Integration
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "Repay dialog shows current debt per asset"
       - "User can select full or partial repayment"
