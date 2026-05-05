@@ -1,0 +1,31 @@
+name: Product Intent Spec Audit
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  spec-audit:
+    name: Validate against product intent spec
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Audit PR against stories.yaml
+        uses: jonybur/locus-audit-action@v1
+        with:
+          stories-path: stories.yaml
+          fail-on-divergence: false
+          fail-on-missing: false
+          min-coverage: 0
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          model: claude-haiku-4-5
