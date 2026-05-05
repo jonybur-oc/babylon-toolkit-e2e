@@ -109,10 +109,10 @@ grep "status:" stories.yaml | sort | uniq -c
 | Vault Lifecycle (BT-11–12) | 2 | `in-progress` — tests written |
 | Aave Integration (BT-13–15) | 3 | `in-progress` — tests written |
 | Position Monitoring (BT-16–17) | 2 | `in-progress` — tests written |
-| Withdrawal (BT-18–19) | 2 | `not-implemented` |
-| Activity Log (BT-20) | 1 | `not-implemented` |
+| Withdrawal (BT-18–19) | 2 | `in-progress` — tests written |
+| Activity Log (BT-20) | 1 | `in-progress` — tests written |
 | Compliance (BT-21–22) | 2 | `in-progress` — tests written |
-| Application Selection (BT-23) | 1 | `not-implemented` |
+| Application Selection (BT-23) | 1 | `in-progress` — tests written |
 
-**19 of 23 stories have tests written; 4 remain not-implemented.**
-Next: Withdrawal and Pegout Monitoring (BT-18–19) — initiate withdrawal and monitor pegout status.
+**23 of 23 stories have tests written — full coverage achieved.**
+All stories are `in-progress`; next step is to run tests against the real app and mark stories `implemented` as CI goes green.

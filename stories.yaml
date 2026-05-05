@@ -259,7 +259,7 @@ stories:
   - story_id: BT-18
     title: User can initiate a vault withdrawal (pegout)
     section: Withdrawal
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "User can request withdrawal from an active vault"
       - "Withdrawal flow shows the expected BTC amount to be returned after fees"
@@ -272,7 +272,7 @@ stories:
   - story_id: BT-19
     title: User can monitor pegout status
     section: Withdrawal
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "Active pegouts are listed with their current status (Initiated/BTC Broadcasting/Confirmed)"
       - "App polls pegout status at regular intervals (usePegoutPolling)"
@@ -287,7 +287,7 @@ stories:
   - story_id: BT-20
     title: User can view transaction activity log
     section: Activity Log
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "Activity page (/activity) lists all historical deposit and withdrawal events for the connected address pair"
       - "Each entry shows: event type, date, BTC amount, and status"
@@ -330,7 +330,7 @@ stories:
   - story_id: BT-23
     title: User can navigate between registered DeFi applications
     section: Application Selection
-    status: not-implemented
+    status: in-progress
     acceptance_criteria:
       - "Dashboard lists all registered applications (e.g. Aave) fetched from the application registry"
       - "Each application entry shows its name, logo, and a brief description"
